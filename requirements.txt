@@ -1,0 +1,39 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# NION Orchestration Engine — Python Dependencies
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# Install:  pip install -r requirements.txt
+# Verify:   python -c "from langchain_nvidia_ai_endpoints import ChatNVIDIA; print('OK')"
+# ══════════════════════════════════════════════════════════════════════════════
+
+
+# ── LangChain Core ────────────────────────────────────────────────────────────
+langchain>=0.3.0
+langchain-core>=0.3.0
+
+
+# ── NVIDIA NIM Integration (PRIMARY — required) ───────────────────────────────
+# Official NVIDIA LangChain package: ChatNVIDIA
+# Powers all LLM calls when LLM_PROVIDER=nvidia (default)
+# Free API key: https://build.nvidia.com
+langchain-nvidia-ai-endpoints>=0.3.0
+
+
+# ── OpenAI Integration (fallback + alternative provider) ─────────────────────
+# Used as: (1) automatic fallback if langchain-nvidia-ai-endpoints not installed
+#          (2) primary provider when LLM_PROVIDER=openai
+langchain-openai>=0.2.0
+
+
+# ── Google Gemini (optional — only if LLM_PROVIDER=gemini) ───────────────────
+langchain-google-genai>=2.0.0
+
+
+# ── Data Validation ───────────────────────────────────────────────────────────
+# Powers typed models: L1Plan, L3AgentResult, OrchestrationResult, etc.
+pydantic>=2.0.0
+
+
+# ── Environment Configuration ─────────────────────────────────────────────────
+# utf-8-sig encoding handles Windows BOM-prefixed .env files transparently
+python-dotenv>=1.0.0
