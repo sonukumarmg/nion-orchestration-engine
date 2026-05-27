@@ -1,17 +1,15 @@
 package com.ainions.nion.security;
 
 import com.ainions.nion.config.NionProperties;
-import io.github.bucket4j.Bandwidth;
-import io.github.bucket4j.Bucket;
-import io.github.bucket4j.Refill;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.Duration;
+import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -20,7 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class RateLimitFilter extends OncePerRequestFilter {
 
-    private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
+    private final Map<String, Window> windows = new ConcurrentHashMap<>();
     private final NionProperties properties;
 
     public RateLimitFilter(NionProperties properties) {
@@ -34,8 +32,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
         String key = resolveKey(request);
-        Bucket bucket = buckets.computeIfAbsent(key, this::newBucket);
-        if (bucket.tryConsume(1)) {
+        if (allowRequest(key)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -51,10 +48,25 @@ public class RateLimitFilter extends OncePerRequestFilter {
         return request.getRemoteAddr();
     }
 
-    private Bucket newBucket(String key) {
+    private boolean allowRequest(String key) {
         int limit = properties.rateLimit().requestsPerMinute();
-        Refill refill = Refill.greedy(limit, Duration.ofMinutes(1));
-        Bandwidth bandwidth = Bandwidth.classic(limit, refill);
-        return Bucket.builder().addLimit(bandwidth).build();
+        long currentMinute = Instant.now().getEpochSecond() / 60;
+        Window window = windows.computeIfAbsent(key, ignored -> new Window(currentMinute));
+        synchronized (window) {
+            if (window.minuteBucket != currentMinute) {
+                window.minuteBucket = currentMinute;
+                window.counter.set(0);
+            }
+            return window.counter.incrementAndGet() <= limit;
+        }
+    }
+
+    private static class Window {
+        private long minuteBucket;
+        private final AtomicInteger counter = new AtomicInteger(0);
+
+        private Window(long minuteBucket) {
+            this.minuteBucket = minuteBucket;
+        }
     }
 }

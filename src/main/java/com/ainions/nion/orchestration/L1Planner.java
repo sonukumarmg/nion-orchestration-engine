@@ -87,7 +87,7 @@ public class L1Planner {
             try {
                 domain = L2Domain.valueOf(taskNode.path("domain").asText());
             } catch (IllegalArgumentException ex) {
-                domain = fallback.tasks().isEmpty() ? L2Domain.TRACKING_EXECUTION : fallback.tasks().getFirst().domain();
+                domain = fallback.tasks().isEmpty() ? L2Domain.TRACKING_EXECUTION : fallback.tasks().get(0).domain();
             }
             PriorityLevel priority;
             try {

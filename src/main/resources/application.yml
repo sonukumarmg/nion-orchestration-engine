@@ -21,13 +21,6 @@ spring:
     redis:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
-  ai:
-    openai:
-      api-key: ${OPENAI_API_KEY:dummy}
-      chat:
-        options:
-          model: ${OPENAI_MODEL:gpt-4o-mini}
-
 nion:
   jwt:
     issuer: ${NION_JWT_ISSUER:nion}

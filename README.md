@@ -4,7 +4,7 @@
 
 ### Enterprise AI Program Manager · Modular Monolith · v2.0
 
-Structured intelligence from unstructured project communications — now rebuilt with Spring Boot, PostgreSQL, MongoDB, Redis, and Spring AI.
+Structured intelligence from unstructured project communications — now rebuilt with Spring Boot, PostgreSQL, MongoDB, Redis, and a Spring-ready LLM adapter.
 
 </div>
 
@@ -21,7 +21,7 @@ Structured intelligence from unstructured project communications — now rebuilt
 - Async orchestration workflow with audit trail
 - MongoDB for raw message payloads, PostgreSQL for structured outputs
 - Redis caching for knowledge retrieval
-- Spring AI integration with fallback mode
+- LLM integration with fallback mode
 - OpenAPI documentation and Docker Compose
 
 ---
@@ -50,7 +50,7 @@ Cross-cutting: knowledge retrieval + evaluation
 | Relational DB | PostgreSQL + JPA | Structured orchestration data |
 | Document DB | MongoDB | Raw unstructured message payloads |
 | Cache | Redis | Low-latency knowledge retrieval |
-| AI | Spring AI (OpenAI) | Clean LLM abstraction + fallback |
+| AI | OpenAI REST (Spring AI-ready adapter) | Clean LLM abstraction + fallback |
 | Docs | Springdoc OpenAPI | Auto-generated API docs |
 | DevOps | Docker Compose | One-command local stack |
 | Testing | JUnit + Testcontainers | Integration tests with real DBs |
@@ -68,7 +68,7 @@ src/main/java/com/ainions/nion
   repository/         → Spring Data repositories
   security/           → JWT + RBAC
   tenant/             → Tenant context + filter
-  llm/                → Spring AI wrapper + JSON schema validation
+  llm/                → LLM adapter + JSON schema validation
   notification/       → Webhook notifications
   util/               → Audit logs, mappers
 src/main/resources
