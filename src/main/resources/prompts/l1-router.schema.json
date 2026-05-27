@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["intent", "messageType", "gaps", "tasks"],
+  "properties": {
+    "intent": {"type": "string"},
+    "messageType": {"type": "string"},
+    "gaps": {"type": "array", "items": {"type": "string"}},
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["domain", "priority", "rationale", "agentHints"],
+        "properties": {
+          "domain": {"type": "string"},
+          "priority": {"type": "string"},
+          "rationale": {"type": "string"},
+          "agentHints": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    }
+  }
+}

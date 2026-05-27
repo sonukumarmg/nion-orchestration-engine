@@ -1,0 +1,48 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/nion}
+    username: ${POSTGRES_USER:nion}
+    password: ${POSTGRES_PASSWORD:nion}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  data:
+    mongodb:
+      uri: ${MONGO_URI:mongodb://localhost:27017/nion}
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:dummy}
+      chat:
+        options:
+          model: ${OPENAI_MODEL:gpt-4o-mini}
+
+nion:
+  jwt:
+    issuer: ${NION_JWT_ISSUER:nion}
+    secret: ${NION_JWT_SECRET:dev-secret-change-me-dev-secret-change-me}
+    access-token-minutes: ${NION_JWT_MINUTES:60}
+  rate-limit:
+    requests-per-minute: ${NION_RATE_LIMIT_RPM:120}
+  llm:
+    provider: ${NION_LLM_PROVIDER:mock}
+    model: ${NION_LLM_MODEL:gpt-4o-mini}
+  notification:
+    default-webhook: ${NION_WEBHOOK_URL:}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics

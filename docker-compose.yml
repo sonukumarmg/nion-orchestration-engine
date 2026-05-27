@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: nion
+      POSTGRES_USER: nion
+      POSTGRES_PASSWORD: nion
+    ports:
+      - "5432:5432"
+    volumes:
+      - nion_pgdata:/var/lib/postgresql/data
+
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - nion_mongo:/data/db
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+volumes:
+  nion_pgdata:
+  nion_mongo:

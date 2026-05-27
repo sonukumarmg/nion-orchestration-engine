@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["toneOk", "accuracyScore", "completenessScore", "overallQuality", "recommendation"],
+  "properties": {
+    "toneOk": {"type": "boolean"},
+    "accuracyScore": {"type": "integer"},
+    "completenessScore": {"type": "integer"},
+    "overallQuality": {"type": "string"},
+    "recommendation": {"type": "string"}
+  }
+}
